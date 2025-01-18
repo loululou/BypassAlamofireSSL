@@ -28,8 +28,8 @@ Update the logic under the `// Parse and modify the body` comment:
 frida -U -l alamo-sslmod.js -f com.xxx.xxx
 ```
 
+Change the logic here to modify request parameters as needed
 ```javascript
-// Change the logic here to modify request parameters as needed
 let modifiedBody = bodyString
     .replace(/ORIGINAL_TEXT/, "MODIFY_TEXT");
 console.log(`[Modified Request Body]: ${modifiedBody}`);
