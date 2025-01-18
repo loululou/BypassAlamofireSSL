@@ -21,7 +21,8 @@ frida -U -l alamo-ssl.js -f com.xxx.xxx
 ```
 
 ## Replace Text Feature
-To modify request parameters, locate the section in the script where the request body is processed. Update the logic under the `// Parse and modify the body` comment:
+To modify request parameters, locate the section in the script where the request body is processed.  
+Update the logic under the `// Parse and modify the body` comment:
 ```javascript
 // Change the logic here to modify request parameters as needed
 let modifiedBody = bodyString
