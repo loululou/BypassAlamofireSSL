@@ -22,15 +22,29 @@
             if (NSMutableURLRequest) {
                 Interceptor.attach(NSMutableURLRequest["- setHTTPBody:"].implementation, {
                     onEnter: function (args) {
-                        const bodyData = new ObjC.Object(args[2]); // NSData
-                        const bodyString = ObjC.classes.NSString.alloc().initWithData_encoding_(bodyData, 4).toString();
-                        console.log(`[Captured Request Body]: ${bodyString}`);
+                        try {
+                            const bodyData = new ObjC.Object(args[2]); // NSData
+                            const bodyString = ObjC.classes.NSString.alloc().initWithData_encoding_(bodyData, 4).toString();
+                            console.log(`[Captured Request Body]: ${bodyString}`);
+
+                            // Parse and modify the body
+                            // Change the logic here to modify request parameters as needed
+                            let modifiedBody = bodyString
+                                .replace(/ORIGINAL_TEXT/, "MODIFY_TEXT");
+                            console.log(`[Modified Request Body]: ${modifiedBody}`);
+
+                            // Convert the modified body back to NSData
+                            const newBodyData = ObjC.classes.NSString.stringWithString_(modifiedBody).dataUsingEncoding_(4);
+                            args[2] = newBodyData;
+                        } catch (e) {
+                            console.log(`[Hook Error on Enter]: ${e}`);
+                        }
                     },
                 });
 
                 Interceptor.attach(NSMutableURLRequest["- setHTTPBodyStream:"].implementation, {
                     onEnter: function (args) {
-                        console.log("[Captured Request Body Stream]: Body is set via stream. Capturing streams requires specific hooks.");
+                        console.log("[Captured Request Body Stream]: Body is set via stream. Modifying streams is not supported in this hook.");
                     },
                 });
             } else {
@@ -41,36 +55,9 @@
         }
     }
 
-    function hookRequestsAndResponses() {
-        try {
-            const func_urlSessionDidReceive = Module.getExportByName(
-                null,
-                '$s9Alamofire15SessionDelegateC03urlB0_8dataTask10didReceiveySo12NSURLSessionC_So0i4DataF0C10Foundation0J0VtF'
-            );
-            Interceptor.attach(func_urlSessionDidReceive, {
-                onEnter(args) {
-                    const dataTask = new ObjC.Object(args[1]); // NSURLSessionDataTask
-                    const request = dataTask.currentRequest(); // NSURLRequest
-                    const response = dataTask.response(); // NSURLResponse
-
-                    console.log(`[Request URL]: ${request.URL().absoluteString()}`);
-                    console.log(`[Request Headers]: ${request.allHTTPHeaderFields()}`);
-
-                    if (response) {
-                        console.log(`[Response Status]: ${response.statusCode()}`);
-                        console.log(`[Response Headers]: ${response.allHeaderFields().toString()}`);
-                    }
-                },
-            });
-        } catch (e) {
-            console.log(`[Hook Error]: ${e}`);
-        }
-    }
-
     function main() {
         disableSSLPinningGeneric();
         hookNSURLRequest();
-        hookRequestsAndResponses();
     }
 
     main();
