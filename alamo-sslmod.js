@@ -44,7 +44,7 @@
 
                 Interceptor.attach(NSMutableURLRequest["- setHTTPBodyStream:"].implementation, {
                     onEnter: function (args) {
-                        console.log("[Captured Request Body Stream]: Body is set via stream. Modifying streams is not supported in this hook.");
+                        console.log("[Captured Request Body Stream]");
                     },
                 });
             } else {
