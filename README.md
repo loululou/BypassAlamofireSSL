@@ -5,6 +5,7 @@ This script is for bypassing SSL pinning (Alamofire) and capture network request
 - Bypasses SSL pinning.
 - Hooks into `NSMutableURLRequest` to capture HTTP request bodies.
 - Logs such as request URLs, headers, bodies, and response headers.
+- Allows replacing text in HTTP request bodies dynamically (e.g., modify `ORIGINAL_TEXT` or other parameters).
 
 ## Usage
 1. Load this script into a hooking framework like Frida.
@@ -17,6 +18,15 @@ frida-ps -Uai
 
 ```
 frida -U -l alamo-ssl.js -f com.xxx.xxx
+```
+
+## Replace Text Feature
+To modify request parameters, locate the section in the script where the request body is processed. Update the logic under the `// Parse and modify the body` comment:
+```javascript
+// Change the logic here to modify request parameters as needed
+let modifiedBody = bodyString
+    .replace(/ORIGINAL_TEXT/, "MODIFY_TEXT");
+console.log(`[Modified Request Body]: ${modifiedBody}`);
 ```
 
 ## Prerequisites
