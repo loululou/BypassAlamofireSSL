@@ -22,7 +22,7 @@ frida -U -l alamo-sslcap.js -f com.xxx.xxx
 
 ## Replace Text Feature
 To modify request parameters, locate the section in the script where the request body is processed.  
-Update the logic under the `// Parse and modify the body` comment:
+Update the logic under the `// Modify request body` comment:
 
 ```
 frida -U -l alamo-sslmod.js -f com.xxx.xxx
@@ -30,9 +30,8 @@ frida -U -l alamo-sslmod.js -f com.xxx.xxx
 
 Change the logic here to modify request parameters as needed
 ```javascript
-let modifiedBody = bodyString
-    .replace(/ORIGINAL_TEXT/, "MODIFY_TEXT");
-console.log(`[Modified Request Body]: ${modifiedBody}`);
+if (bodyString.includes("specific_text"")) {
+                            const modifiedBody = bodyString.replace(/specific_text"/g, "specific_text"");
 ```
 
 ## Prerequisites
