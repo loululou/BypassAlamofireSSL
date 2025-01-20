@@ -28,7 +28,7 @@ Update the logic under the `// Modify request body` comment:
 frida -U -l alamo-sslmod.js -f com.xxx.xxx
 ```
 
-Change the logic here to modify request parameters as needed
+Change the `specific_text` to modify request parameters as needed
 ```javascript
 if (bodyString.includes("specific_text"")) {
                             const modifiedBody = bodyString.replace(/specific_text"/g, "specific_text"");
