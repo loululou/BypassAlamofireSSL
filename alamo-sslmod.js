@@ -28,7 +28,7 @@
                         console.log(`[Captured Request Body Before Modification]: ${bodyString}`);
 
                         // Modify request body
-                        if (bodyString.includes("specific_text"")) {
+                        if (bodyString.includes("specific_text")) {
                             const modifiedBody = bodyString.replace(/specific_text"/g, "specific_text");
                             console.log(`[Modified Request Body]: ${modifiedBody}`);
 
